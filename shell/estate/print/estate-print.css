@@ -1,0 +1,29 @@
+/* estate-print — the estate's printed page.
+ *
+ * Contract and reasoning: estate-print.md, beside this file. Published at
+ * print/estate-print.css under the CDN's estate/ folder, unversioned, and imported by the title bar's
+ * stylesheet. estate-print.js beside it writes the three corners a stylesheet cannot know (the tenant and
+ * title, the address, printed when and by whom); this file leaves the frame out and counts the pages.
+ */
+
+@media print {
+  /* The screen's frame: controls nobody can click on paper. */
+  .estate-bar,
+  .estate-sidenav,
+  [data-estate-print="hide"],
+  .estate-tip-bubble,
+  .estate-hover-card { display: none !important; }
+
+  html, body { background: #ffffff !important; }
+  a { color: inherit; text-decoration: none; }   /* a link prints as its text */
+}
+
+@page {
+  margin: 15mm;
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-family: system-ui, sans-serif;
+    font-size: 8pt;
+    color: rgb(71 85 105);
+  }
+}

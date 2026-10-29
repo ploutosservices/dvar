@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>estate-hover check</title>
+<!-- estate-hover.md §4: a plain page, no title bar, the stylesheet and the script alone. Published beside
+     them as <CDN>/estate/hover/index.html, so the relative links reach the CDN's copies there. -->
+<link rel="stylesheet" href="estate-hover.css">
+<script src="estate-hover.js" defer></script>
+<style>
+  body { font: 15px/1.5 system-ui, sans-serif; margin: 2rem; color: #0f172a; }
+  .row { display: flex; gap: 2rem; align-items: center; margin: 0 0 12rem; }
+  .far { margin-left: auto; }
+  .box { width: 140px; height: 40px; overflow: hidden; border: 1px dashed #94a3b8; padding: 4px; }
+  .who { display: flex; gap: 10px; align-items: center; }
+  .who b { display: block; }
+  .pic { width: 40px; height: 40px; border-radius: 50%; background: #c7d2fe; display: grid; place-items: center; font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>estate-hover</h1>
+<p>Hover, tap or tab to each name: its card opens below it. Escape closes it.</p>
+<div class="row">
+  <span class="estate-hover" id="left" tabindex="0">Asha Rao
+    <span class="estate-hover-card">
+      <span class="who"><span class="pic" aria-hidden="true">AR</span><span><b>Asha Rao</b>asha@example.test</span></span>
+      <hr><a href="#signed-in" id="cardlink">Where am I signed in</a>
+    </span>
+  </span>
+  <span class="estate-hover far" id="right" tabindex="0">At the right edge
+    <span class="estate-hover-card">This card would run off the screen, so the script opens it leftwards.</span>
+  </span>
+</div>
+<div class="box"><span class="estate-hover" id="boxed" tabindex="0">In a box
+  <span class="estate-hover-card">Drawn whole outside the box that would clip it.</span>
+</span></div>
+</body>
+</html>

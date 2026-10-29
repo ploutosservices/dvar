@@ -1,0 +1,28 @@
+dvar
+Copyright 2026 Ploutos Services LLC
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It includes third-party work, each under its own licence, kept beside it:
+
+- Heroicons 2.2 (MIT, Copyright Tailwind Labs, Inc.): the icons under shell/estate/icons/ that name it in
+  their first line; its licence is shell/estate/icons/LICENSE-heroicons.
+- SunCalc 2.0.2 (BSD-2-Clause, Copyright Volodymyr Agafonkin): shell/suncalc/2.0.2/, its licence in LICENSE there.
+- Floating UI 1.8.0 (MIT, Copyright Floating UI contributors): shell/estate/vendor/floating-ui/1.8.0/, its
+  licence in LICENSE there.
+
+The demo builds or pulls these, and does not include them:
+
+- Chowkidar, bhandara and dakiya (Apache-2.0, Copyright Ploutos Services LLC), from their own repositories;
+- quay.io/keycloak/keycloak:26.4.4 (Apache-2.0, Copyright Red Hat, Inc. and other contributors);
+- maven:3.9.9-eclipse-temurin-21 (Apache-2.0; the Temurin JDK under GPLv2 with Classpath Exception), to build
+  Chowkidar's extension;
+- python:3.12-slim (PSF License), node:22.11.0-alpine (MIT), nginx:1.27-alpine (BSD-2-Clause),
+  postgres:16.4-alpine (PostgreSQL Licence), chrislusf/seaweedfs:3.80 (Apache-2.0) and
+  axllent/mailpit:v1.20.4 (MIT); each image also carries its base system's packages under their own licences.
+
+The weather slot (shell/estate/weather/) is off in the demo. A house that turns it on sends the visitor's
+location, when the visitor clicks it, to:
+- Open-Meteo, https://open-meteo.com/en/terms (its free tier is for non-commercial use);
+- Nominatim, https://operations.osmfoundation.org/policies/nominatim/ (its usage policy);
+- NOAA Tides and Currents, https://tidesandcurrents.noaa.gov/disclaimers.html (US stations only).

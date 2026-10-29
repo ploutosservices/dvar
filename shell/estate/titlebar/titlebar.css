@@ -1,0 +1,234 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Ploutos Services LLC */
+/* The estate title bar — one bar, every application.
+ *
+ * Each application draws the bar's markup itself; this file decides how it looks.
+ * Consistency overrides other things, so every value that decides how the bar LOOKS lives here and nowhere else: change
+ * --estate-bar-logo-w here and every application's logo cell widens on its next page load.
+ *
+ * Published as titlebar/titlebar.css under the CDN's estate/ folder — an unversioned name on
+ * purpose (a dated one freezes each application until somebody edits it).
+ */
+
+/* The hover sentence is estate-tip's and the hover card estate-hover's, each in its own folder beside this one;
+ * the bar only places them. */
+@import url("../tip/estate-tip.css");
+@import url("../hover/estate-hover.css");
+@import url("../print/estate-print.css");   /* the printed page */
+
+:root {
+  --estate-bar-h: 56px;          /* one line; the logo is contained, never the height's cause */
+  --estate-bar-logo-w: 64px;     /* the white corner cell — the same width in every application */
+  --estate-bar-fg: #cbd5e1;      /* slate-300 — labels and icons at rest */
+  --estate-bar-fg-strong: #f1f5f9;
+  --estate-bar-hover: #1e293b;
+  --estate-bar-gap: 12px;
+  --estate-bar-pad: 16px;
+
+  /* THE COLOUR OF AN ENVIRONMENT IS DATA, AND THIS FILE DOES NOT KNOW ONE.
+   *
+   * An application sets `--estate-env-color` (and, where the word needs its own tone,
+   * `--estate-env-word`) on the `.estate-bar` element from a value its GROUND renders, so a new
+   * environment costs a row in that ground's configuration and never a release of this file: an
+   * environment is an opaque string, and adding one must cost rows.
+   *
+   * THE THREE NAMED COLOURS ARE GONE. They stood here as a fallback while the applications learned
+   * to pass the value; every application passes it from its ground now, so the debt is paid and the only environment name left in this file is
+   * `production` — and only where an act cannot be taken back (see .estate-bar-env).
+   */
+  --estate-env-undeclared: #7f1d1d;   /* red-900 — see .estate-bar-main */
+  --estate-env-word:       #5eead4;
+}
+
+.estate-bar {
+  display: flex;
+  height: var(--estate-bar-h);
+  flex-shrink: 0;
+  font-family: inherit;
+}
+
+/* THE LOGO SITS LEFT OF THE COLOUR, on the page's own white. The bar's background does not run
+ * behind it: it does not sit on top of the logo. */
+.estate-bar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--estate-bar-logo-w);
+  flex-shrink: 0;
+  background: #ffffff;
+  text-decoration: none;
+}
+.estate-bar-logo:hover { opacity: .8; }
+.estate-bar-logo img {
+  height: 32px;
+  max-width: calc(var(--estate-bar-logo-w) - 16px);
+  object-fit: contain;   /* a wordmark is never cropped to a circle */
+}
+
+/* The coloured bar begins after the logo. */
+.estate-bar-main {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: var(--estate-bar-gap);
+  padding: 0 var(--estate-bar-pad);
+  /* AN ENVIRONMENT NOBODY DECLARED MUST NOT LOOK LIKE PRODUCTION. This defaulted to production's
+   * indigo, so a ground the estate had never heard of — `env1`, measured — wore the colour of
+   * the one place where a mistake cannot be taken back. The whole purpose of the bar is to say
+   * which ground you are on, and the unknown case was answering with the most reassuring one.
+   *
+   * THIS IS NOW THE ONLY RULE THAT PAINTS THE BAR. A ground that passes a colour wears it; one
+   * that does not wears the red, whatever it is called. There is no third case and no name to
+   * match. */
+  background: var(--estate-env-color, var(--estate-env-undeclared));
+}
+
+.estate-bar-menu,
+.estate-bar-actions button,
+.estate-bar-actions a,
+.estate-bar-jump a,
+.estate-bar-exit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--estate-bar-fg);
+  cursor: pointer;
+  text-decoration: none;
+}
+.estate-bar-menu:hover,
+.estate-bar-actions button:hover,
+.estate-bar-actions a:hover,
+.estate-bar-jump a:hover,
+.estate-bar-exit:hover { color: var(--estate-bar-fg-strong); background: var(--estate-bar-hover); }
+
+.estate-bar-menu svg,
+.estate-bar-actions svg,
+.estate-bar-exit svg { width: 20px; height: 20px; }
+
+/* THE APPLICATION'S NAME — always shown, because a URL is not a name anybody reads. */
+.estate-bar-app {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--estate-bar-fg-strong);
+  white-space: nowrap;
+}
+
+/* The tenant or account, when the application has one. Absent is a valid state. */
+.estate-bar-context {
+  font-size: 14px;
+  color: var(--estate-bar-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The environment is a colour AND a word. An application that passes `--estate-env-word` decides
+ * its own tone; the name-keyed lines below are the same debt as the colours.
+ *
+ * PRODUCTION CARRYING NO WORD IS THE ONE NAME THIS FILE KNOWS ON PURPOSE, and it is the exception
+ * the estate's rule allows: the bar is silent exactly where an act cannot be undone, so silence
+ * means production and every other ground says its own name out loud. */
+.estate-bar-env {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--estate-env-word);
+  white-space: nowrap;
+}
+/* The word's own tone, where an application wants one: `--estate-env-word` on the element. The
+ * amber that used to be keyed off the name `development` went with the colours. */
+.estate-bar[data-env="production"]  .estate-bar-env { display: none; }
+
+.estate-bar-spacer { flex: 1; }
+
+.estate-bar-actions,
+.estate-bar-jump { display: flex; align-items: center; gap: 4px; }
+
+/* THE JUMP SLOT — the tenant's OTHER applications, drawn by each application from
+ * the tenant's list of applications. Each icon is an `<img>` of that
+ * application's manifest icon, and those svgs carry a viewBox and no width, so unsized they draw
+ * 300×150: the size is held here, not by the picture. */
+.estate-bar-jump a { position: relative; }
+.estate-bar-jump a img { width: 20px; height: 20px; object-fit: contain; }
+/* A MARK IS DRAWN FOR WHITE, AND THE BAR IS DARK EVERYWHERE: an application's mark measured
+ * 1.17-1.48:1 on the four bar colours. So each jump icon sits on the logo cell's white, and every mark
+ * is drawn in its light colours — that mark's dark-scheme blue measured 2.47:1 on the logo cell. */
+.estate-bar-jump a img { box-sizing: content-box; padding: 3px; border-radius: 4px; background: #ffffff; }
+.estate-bar-logo, .estate-bar-jump a img { color-scheme: light; }
+
+/* THE WEATHER SLOT — estate-title-bar.js fills it; the application renders only the empty
+ * `<a class="estate-bar-weather" href="…">`. The temperature (or `—°` for a named failure) sits
+ * beside the icon, and what the state MEANS is said on hover by the tip below, drawn from the
+ * `data-estate-tip` the script sets: an application with no tooltip component of its own still
+ * gets one, and every state carries its sentence. The jump slot's links wear the same tip, from
+ * the `data-estate-tip` the application writes (`Open <name>`), and so does every other icon in the bar — the
+ * application's own actions, where am I signed in, sign out — so one hover looks the same in every application. */
+.estate-bar-weather, .estate-bar-actions > a, .estate-bar-actions > button, .estate-bar-exit, .estate-bar-menu { position: relative; }
+.estate-bar-weather-temp { margin-left: 4px; font-size: 14px; white-space: nowrap; }
+/* estate-tip draws the sentence; the bar's right-hand controls open it leftwards so it stays on the
+ * screen, and keep it on one line. The menu, at the bar's left, keeps estate-tip's own direction. The
+ * bar opens no stacking context (rule 7), so estate-tip's z-index reaches the page. */
+.estate-bar-weather[data-estate-tip]::after,
+.estate-bar-jump a[data-estate-tip]::after,
+.estate-bar-actions > [data-estate-tip]::after,
+.estate-bar-exit[data-estate-tip]::after { left: auto; right: 0; white-space: nowrap; }
+
+.estate-bar-who {
+  font-size: 14px;
+  color: var(--estate-bar-fg);
+  white-space: nowrap;
+  min-width: 0;
+}
+/* THE ELLIPSIS IS THE TEXT'S, NEVER THE GREETING'S: overflow on the greeting itself clips its estate-hover
+ * card, which opens below the bar. A greeting that carries no card keeps the old rule until it adopts one. */
+.estate-bar-who:not(.estate-hover),
+.estate-bar-who-text { overflow: hidden; text-overflow: ellipsis; }
+.estate-bar-who-text { display: block; min-width: 0; }
+/* The greeting sits at the bar's right, so its card opens leftwards from its right edge. */
+.estate-bar-who.estate-hover > .estate-hover-card { left: auto; right: 0; }
+
+/* A phone keeps the logo, the menu and the application's name; the rest gives way. */
+@media (max-width: 640px) {
+  .estate-bar-context,
+  .estate-bar-jump,
+  .estate-bar-who { display: none; }
+}
+
+/* THE SIDE NAV — a page's related pages, down the left edge under the bar. The page being read is marked in the ground's colour, set on the nav as on the bar. */
+.estate-sidenav {
+  flex: none;
+  width: 11rem;
+  overflow-y: auto;
+  padding: 12px 0;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+.estate-sidenav-title {
+  margin: 0 16px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(51 65 85);         /* slate-700 */
+}
+.estate-sidenav a {
+  display: block;
+  padding: 6px 16px 6px 13px;
+  border-left: 3px solid transparent;
+  font-size: 14px;
+  color: #1e293b;
+  text-decoration: none;
+}
+.estate-sidenav a:hover { background: #f1f5f9; color: #0f172a; }
+.estate-sidenav a[aria-current="page"] {
+  border-left-color: var(--estate-env-color, var(--estate-env-undeclared));
+  background: #f8fafc;
+  font-weight: 600;
+  color: #0f172a;
+}
+/* On paper the side nav, like the bar, is estate-print's to leave out. */

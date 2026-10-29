@@ -1,0 +1,19 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: Apache-2.0
+     Copyright 2026 Ploutos Services LLC -->
+<!-- The estate weather, stand-alone. The weather itself is weather.js beside this file, which any
+     application mounts inside its own shell — opened, for example, in a side panel from the title
+     bar's weather icon. This page is the same script with nothing around it, for a
+     reader who follows the link directly. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather</title>
+<style>body { font-family: system-ui, sans-serif; margin: 1rem; }</style>
+</head>
+<body>
+<main data-estate-weather="now"></main>
+<script type="module" src="weather.js?v=5f44c667c0f3"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>estate-print check</title>
+<!-- estate-print.md §4: a title bar, a side nav, a footer marked hide and three sheets of content. Published
+     beside the files as <CDN>/estate/print/index.html; the relative links reach the CDN's copies there. Print
+     it (or Save as PDF): every sheet carries the four corners, and none of the frame. -->
+<link rel="stylesheet" href="../titlebar/titlebar.css">
+<script src="estate-print.js" defer></script>
+<style>
+  body { margin: 0; font: 15px/1.6 system-ui, sans-serif; color: #0f172a; }
+  .shell { display: flex; }
+  main { flex: 1; padding: 1rem 2rem; min-width: 0; }
+  footer { padding: 1rem 2rem; background: #e2e8f0; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { border-bottom: 1px solid #e2e8f0; padding: 4px 8px; text-align: left; }
+  .neg { color: #b91c1c; }
+</style>
+</head>
+<body>
+<header class="estate-bar" data-env="development" style="--estate-env-color: rgb(120 53 15)" data-estate-print-who="Asha Rao">
+  <a class="estate-bar-logo" href="#"></a>
+  <div class="estate-bar-main">
+    <span class="estate-bar-app">Ledger</span><span class="estate-bar-context">Acme</span>
+    <span class="estate-bar-env">DEVELOPMENT</span><div class="estate-bar-spacer"></div>
+  </div>
+</header>
+<div class="shell">
+  <nav class="estate-sidenav"><p class="estate-sidenav-title">Related</p><a href="#" aria-current="page">Cash movements</a></nav>
+  <main>
+    <h1>Cash movements</h1>
+    <p>Print this page: the title bar, the side nav and the grey footer stay on the screen, and every sheet says
+      whose page it is, what it is, where it lives, when and by whom it was printed, and which sheet of how many.</p>
+    <table id="rows"><thead><tr><th>Date</th><th>From</th><th>To</th><th>Amount</th></tr></thead><tbody></tbody></table>
+  </main>
+</div>
+<footer data-estate-print="hide">A footer of controls, marked data-estate-print="hide".</footer>
+<script>
+  // Three sheets of rows, so the page counter has something to count.
+  var body = document.querySelector('#rows tbody')
+  for (var i = 1; i <= 120; i++) {
+    var tr = document.createElement('tr')
+    var amount = ((i * 7919) % 20000 - 6000) / 100
+    tr.innerHTML = '<td>2026-10-' + String(1 + i % 28).padStart(2, '0') + '</td><td>Operating</td><td>Reserve</td>' +
+      '<td class="' + (amount < 0 ? 'neg' : '') + '">' + amount.toFixed(2) + '</td>'
+    body.appendChild(tr)
+  }
+</script>
+</body>
+</html>

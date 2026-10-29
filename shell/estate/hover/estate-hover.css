@@ -1,0 +1,59 @@
+/* estate-hover — the hover card, one estate piece.
+ *
+ * Contract and reasoning: estate-hover.md, beside this file. Published at
+ * hover/estate-hover.css under the CDN's estate/ folder, unversioned, and imported by the title bar's
+ * stylesheet. estate-hover.js beside it adds Escape and keeps the card on the screen; without it the
+ * card still opens by hover, by tap and by keyboard, because all three are this file's.
+ *
+ *     <span class="estate-hover" tabindex="0">Asha Rao
+ *       <span class="estate-hover-card">…any HTML…</span>
+ *     </span>
+ */
+
+/* Zero specificity: an application's own position or display on the element wins. */
+:where(.estate-hover) { position: relative; display: inline-flex; align-items: center; }
+
+.estate-hover-card {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  min-width: 12rem;
+  max-width: 20rem;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .18);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: left;
+  white-space: normal;
+  cursor: auto;
+  z-index: 60;   /* above estate-tip's 50: a card opened over a tipped control stays readable */
+}
+/* The pointer crosses the 8px gap to reach a link inside the card without the card closing. */
+.estate-hover-card::before { content: ""; position: absolute; left: 0; right: 0; top: -9px; height: 9px; }
+.estate-hover-card::after { content: ""; position: absolute; left: 0; right: 0; bottom: -9px; height: 9px; }   /* flipped above */
+
+/* WITH estate-hover.js the card is placed by Floating UI, fixed, so no frame can clip it; the script
+ * marks <html> once Floating UI has loaded, and writes the card's left and top. */
+:root.estate-hover-js .estate-hover-card { position: fixed; margin-top: 0; }
+
+/* HOVER, TAP AND KEYBOARD. A tap focuses the focusable trigger, so :focus-within is the tap as much
+ * as the Tab key; a tap elsewhere moves the focus away and the card closes. */
+.estate-hover:hover > .estate-hover-card,
+.estate-hover:focus-within > .estate-hover-card { display: block; }
+
+.estate-hover[data-estate-hover-align="end"] > .estate-hover-card { left: auto; right: 0; }
+.estate-hover[data-estate-hover-closed] > .estate-hover-card { display: none; }   /* Escape, estate-hover.js */
+
+.estate-hover-card a { color: #1d4ed8; }
+.estate-hover-card hr { margin: 8px 0; border: 0; border-top: 1px solid #e2e8f0; }
+
+@media print { .estate-hover-card { display: none !important; } }

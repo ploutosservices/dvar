@@ -1,0 +1,120 @@
+/* THE ESTATE FORM — one look for every form in every application that links it.
+ *
+ * Spec: estate-form.md beside this file. Published byte-for-byte to <CDN base>/estate/form/estate-form.css,
+ * as estate-table.css is. THE LOOK ONLY: what a form asks and how it checks it stays each
+ * application's. Every colour, size and space is a variable here — a change is one edit to this file.
+ *
+ * Written from two query forms side by side: a label, one date and a Search button; and a filter bar of four fields
+ * and GO. No reset. The tint, New and GO sit at the end of one flow.
+ */
+:root {
+  --estate-form-font:        inherit;
+  --estate-form-size:        0.75rem;    /* the filter bar's scale: text-xs */
+  --estate-form-line:        1rem;
+  --estate-form-fg:          #1f2937;    /* gray-800 — never grey text: it is hard to read */
+  --estate-form-label-fg:    rgb(17 24 39);    /* gray-900 */
+  --estate-form-field-bg:    #ffffff;
+  --estate-form-border:      #d1d5db;    /* gray-300 */
+  --estate-form-focus:       rgb(129 140 248);    /* indigo-400 */
+  --estate-form-radius:      0.25rem;
+  --estate-form-pad-y:       0.25rem;
+  --estate-form-pad-x:       0.375rem;
+  --estate-form-gap:         0.25rem;    /* between fields */
+  --estate-form-row-gap:     0.5rem;     /* between a form's rows */
+  --estate-form-bg:          #e2e8f0;    /* slate-200 — the tint every form sits on, so its white fields read as fields */
+  --estate-form-pad:         0.375rem 0.5rem;
+  --estate-form-icon:        1rem;       /* the New icon */
+
+  --estate-form-go-bg:       #00a651;    /* the GO green */
+  --estate-form-go-fg:       #ffffff;
+
+  --estate-form-primary:     #4f46e5;    /* indigo-600 */
+  --estate-form-primary-hov: rgb(67 56 202);    /* indigo-700 */
+  --estate-form-green:       #16a34a;    /* green-600 */
+  --estate-form-green-hov:   rgb(21 128 61);    /* green-700 */
+  --estate-form-red:         #dc2626;    /* red-600 */
+  --estate-form-red-hov:     #b91c1c;    /* red-700 */
+  --estate-form-quiet-fg:    rgb(51 65 85);    /* slate-700 */
+  --estate-form-quiet-border:#e2e8f0;    /* slate-200 */
+  --estate-form-quiet-hov:   #f8fafc;    /* slate-50 */
+  --estate-form-btn-pad-y:   0.125rem;
+  --estate-form-btn-pad-x:   0.625rem;
+}
+
+/* A form: on a light tint, so its boundary shows against the page and every form looks the same; as wide as what it
+   holds, its rows stacked. */
+.estate-form {
+  display: flex; flex-direction: column; gap: var(--estate-form-row-gap);
+  width: fit-content; max-width: 100%; padding: var(--estate-form-pad);
+  background: var(--estate-form-bg); border-radius: var(--estate-form-radius);
+  font-family: var(--estate-form-font); font-size: var(--estate-form-size); line-height: var(--estate-form-line); color: var(--estate-form-fg);
+}
+
+/* The filter row: the fields and the actions are ONE wrapping flow, GO at its end ("go should go all the way to the
+   right and to the end"), so the only space is at the end of a line, never between the fields and GO. */
+.estate-filter-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: var(--estate-form-gap); }
+.estate-filter-fields, .estate-filter-actions { display: contents; }
+/* GO is FIRST in the markup — Enter presses a form's first submit button, and a form's other buttons may write — and is
+   drawn LAST; New just before it. */
+.estate-filter-actions > .estate-go  { order: 2; }
+.estate-filter-actions > .estate-new { order: 1; }
+
+/* A label and its field, side by side ("Value Date: [ ]"). A field may stand alone with its placeholder
+   naming it, as in a filter bar — then it carries aria-label. */
+.estate-label { display: inline-flex; align-items: center; gap: var(--estate-form-gap); font-weight: 600; color: var(--estate-form-label-fg); white-space: nowrap; }
+
+/* A text box, a date, a number, a select. */
+.estate-field {
+  font: inherit; color: var(--estate-form-fg); background: var(--estate-form-field-bg);
+  border: 1px solid var(--estate-form-border); border-radius: var(--estate-form-radius);
+  padding: var(--estate-form-pad-y) var(--estate-form-pad-x);
+}
+.estate-field:focus { outline: none; border-color: var(--estate-form-focus); box-shadow: 0 0 0 1px var(--estate-form-focus); }
+.estate-field.estate-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* A tick box and its words. */
+.estate-check { display: inline-flex; align-items: center; gap: var(--estate-form-gap); cursor: pointer; user-select: none; }
+
+/* Run the query: the GO. */
+.estate-go {
+  font: inherit; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; cursor: pointer;
+  background: var(--estate-form-go-bg); color: var(--estate-form-go-fg); border: 0; border-radius: var(--estate-form-radius);
+  padding: var(--estate-form-btn-pad-y) var(--estate-form-btn-pad-x); box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+.estate-go:hover { opacity: 0.9; }
+
+/* A new record: the estate add icon alone, in the colour of the text around it; its words are the title and aria-label. */
+.estate-new {
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  width: calc(var(--estate-form-icon) + 2 * var(--estate-form-pad-x)); height: calc(var(--estate-form-icon) + 2 * var(--estate-form-pad-y));
+  padding: 0; border: 0; background: transparent; color: var(--estate-form-label-fg); text-decoration: none;
+}
+.estate-new::before {
+  content: ''; display: inline-block; width: var(--estate-form-icon); height: var(--estate-form-icon); background: currentColor;
+  -webkit-mask: url('../icons/add.svg') center / contain no-repeat; mask: url('../icons/add.svg') center / contain no-repeat;
+}
+
+/* NO RESET: a query is changed by changing its fields. */
+
+/* Every other button: a colour class and, in a filter row or a table, the small size. An action is an icon with its
+   meaning on hover (estate-icons.md); a word on a button is the exception that names an act no icon can. */
+.estate-button {
+  font: inherit; font-size: 0.875rem; line-height: 1.25rem; cursor: pointer; border-radius: var(--estate-form-radius);
+  padding: 0.375rem 0.75rem; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 0.25rem;
+}
+.estate-button:disabled { opacity: 0.5; cursor: not-allowed; }
+.estate-button-primary { background: var(--estate-form-primary); color: #ffffff; }
+.estate-button-primary:hover { background: var(--estate-form-primary-hov); }
+.estate-button-green   { background: var(--estate-form-green); color: #ffffff; }
+.estate-button-green:hover { background: var(--estate-form-green-hov); }
+.estate-button-red     { background: var(--estate-form-red); color: #ffffff; }
+.estate-button-red:hover { background: var(--estate-form-red-hov); }
+.estate-button-quiet   { background: transparent; color: var(--estate-form-quiet-fg); border-color: var(--estate-form-quiet-border); }
+.estate-button-quiet:hover { background: var(--estate-form-quiet-hov); }
+/* On the form's tint a quiet button's slate-200 edge vanishes: there it wears the field's face. */
+.estate-form .estate-button-quiet { background: var(--estate-form-field-bg); border-color: var(--estate-form-border); }
+/* The filter row's scale, so a button beside GO lines up with it. Declared last so it wins. */
+.estate-button-sm { font-size: var(--estate-form-size); line-height: var(--estate-form-line); padding: var(--estate-form-btn-pad-y) var(--estate-form-btn-pad-x); }
+
+/* A refusal or a message about the form, said in words. */
+.estate-form-error { font-weight: 600; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--estate-form-radius); padding: 0.25rem 0.5rem; }

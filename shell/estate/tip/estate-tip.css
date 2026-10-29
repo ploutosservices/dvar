@@ -1,0 +1,67 @@
+/* estate-tip — the hover sentence, one estate piece.
+ *
+ * Contract and reasoning: estate-tip.md, beside this file. Published at
+ * tip/estate-tip.css under the CDN's estate/ folder, an unversioned name on purpose, and imported by
+ * the title bar's stylesheet so every application that wears the bar already has it.
+ *
+ * Any element with data-estate-tip="<what it means>" shows that sentence below itself on hover and on
+ * keyboard focus. The element must be able to hold a ::after: a link, a button, a span — never an
+ * <img> or an <input>, which draw none.
+ */
+
+/* :where() keeps the specificity at zero, so an application's own `position` on the element wins and
+ * nothing it already places is moved. */
+:where([data-estate-tip]) { position: relative; }
+
+:where([data-estate-tip])::after {
+  left: 0;   /* opens towards the reading direction; data-estate-tip-align="end" opens the other way */
+}
+:where([data-estate-tip][data-estate-tip-align="end"])::after { left: auto; right: 0; }
+
+[data-estate-tip]:hover::after,
+[data-estate-tip]:focus-visible::after {
+  content: attr(data-estate-tip);
+  position: absolute;
+  top: 100%;
+  margin-top: 6px;
+  width: max-content;
+  max-width: 20rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #0f172a;
+  color: #f1f5f9;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* WITH estate-tip.js the sentence is one bubble at the end of <body>, fixed, so no frame can clip it;
+ * the script marks <html> and the ::after above stands down. The same look, measured into the window. */
+:root.estate-tip-js [data-estate-tip]:hover::after,
+:root.estate-tip-js [data-estate-tip]:focus-visible::after { content: none; }
+.estate-tip-bubble {
+  position: fixed;
+  max-width: min(20rem, calc(100vw - 16px));
+  width: max-content;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #0f172a;
+  color: #f1f5f9;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;   /* a copied row never carries the sentence */
+  z-index: 2147483000;
+}
+.estate-tip-bubble[hidden] { display: none; }
+
+@media print { [data-estate-tip]::after { content: none !important; } .estate-tip-bubble { display: none !important; } }

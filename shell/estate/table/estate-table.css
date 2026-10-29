@@ -1,0 +1,559 @@
+/* The estate table — one table style, every application.
+ *
+ * Contract and reasoning: estate-table.md, beside this file.
+ * Every application links this one file and puts its class names on its own tables, with no
+ * local overrides — so a change here is one edit, and every application shows it on its next page
+ * load without changing anything itself.
+ *
+ * Published to <CDN base>/estate/table/estate-table.css — an unversioned name on purpose, like the
+ * title bar's (a dated one freezes each application until somebody edits it).
+ *
+ * CLASS NAMES ARE THE CONTRACT. A class is added, never renamed or removed while any application
+ * still wears it: one address and no version means a rename breaks all three at once. Values —
+ * every colour, font and spacing below — change freely.
+ */
+
+:root {
+  --estate-table-font:        inherit;
+  /* The table carries no size of its own: body cells and the header row at the page's size, the
+   * band, footer, group band, row numbers, label column and small cells at the one small size the page already has. */
+  --estate-table-size:        1em;        /* body cells, header row, the script's parts */
+  --estate-table-line:        1.5;
+  --estate-table-size-sm:     0.875em;    /* title band, footer, group band, row numbers, label column, small cells */
+  --estate-table-line-sm:     1.5;
+  --estate-table-mono:        ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --estate-table-tracking:    0.025em;
+
+  --estate-table-fg:          rgb(17 24 39);    /* gray-900 — never grey text: it is hard to read */
+  --estate-table-head-fg:     #1f2937;    /* gray-800 */
+  --estate-table-band:        rgb(51 65 85);    /* slate-700 — title band, footer, outer border */
+  --estate-table-band-fg:     #ffffff;    /* white, never white/70: washed-out text is grey */
+  --estate-table-head-bg:     #cfe2ff;    /* light blue, bold */
+  --estate-table-sort-hover:  rgb(71 85 105);    /* slate-600 */
+  --estate-table-row:         #ffffff;
+  --estate-table-row-alt:     #f8fafc;    /* slate-50 — every even row */
+  --estate-table-row-stripe:  #e2e8f0;    /* slate-200 — every even row of an estate-striped table */
+  --estate-table-rule:        #f1f5f9;    /* slate-100 — between rows */
+  --estate-table-link-hover:  #eef2ff;    /* indigo-50 */
+  --estate-table-total-bg:    #eef2ff;    /* indigo-50 */
+  --estate-table-total-rule:  #c7d2fe;    /* indigo-200 */
+  --estate-table-total-num:   rgb(55 48 163);    /* indigo-800 */
+  --estate-table-label-fg:    rgb(51 65 85);    /* slate-700 — the darkest a label may be lighter than */
+
+  --estate-table-section:     rgb(55 48 163);    /* indigo-800 — a row-group band */
+  --estate-table-good:        #dcfce7;    /* green-100 */
+  --estate-table-flag:        #fee2e2;    /* red-100 */
+  --estate-table-join:        #fef3c7;    /* amber-100 */
+  --estate-table-teacher:     #fffbeb;    /* amber-50 */
+  --estate-table-student:     #f0f9ff;    /* sky-50 */
+  --estate-table-balancesheet:   #7dd3fc; /* sky-300 */
+  --estate-table-incomeexpense:  #fcd34d; /* amber-300 */
+  --estate-table-equity:         #c4b5fd; /* violet-300 */
+
+  /* The eight general tints a page's author picks by hand (Bootstrap's table-primary … table-dark,
+   * in the estate's colours). */
+  --estate-tint-primary:    #cfe2ff;
+  --estate-tint-secondary:  #e2e3e5;
+  --estate-tint-success:    #d1e7dd;
+  --estate-tint-info:       #cff4fc;
+  --estate-tint-warning:    #fff3cd;
+  --estate-tint-danger:     #f8d7da;
+  --estate-tint-light:      #f8f9fa;
+  --estate-tint-dark:       rgb(33 37 41);
+  --estate-tint-dark-fg:    #ffffff;
+
+  --estate-table-radius:      0.5rem;
+  --estate-table-band-pad:    0.5rem 1rem;
+  --estate-table-head-pad:    0.375rem 0.625rem;
+  --estate-table-cell-pad:    0.25rem 0.625rem;
+  --estate-table-gap:         0.5rem;
+  --estate-table-actions-inset: 0.5rem;   /* the band's buttons from its right edge */
+  --estate-table-label-w:     8rem;
+  --estate-table-narrow-w:    32rem;      /* a box wearing estate-narrow is at most this wide */
+  --estate-table-medium-w:    42rem;      /* … estate-medium */
+  --estate-table-sticky-h:    70vh;       /* how tall a sticky-header box grows before it scrolls */
+  --estate-table-row-h:       calc(1.5em + 0.5rem + 1px);   /* one row, approximately: a line at the page's size, a cell's padding, the rule — data-rows counts in it */
+  --estate-table-action-w:    1px;        /* an action column shrinks to its icons */
+  --estate-table-frame-w:     1px;
+  --estate-table-rule-w:      1px;
+  --estate-table-total-rule-w: 2px;
+  --estate-table-filtered-w:  3px;        /* the underline on a header whose column box is filtering */
+
+  /* The script's parts: the filter bar, its boxes, the column-filter row, the toggle and the copy button. */
+  --estate-table-control-bg:  #ffffff;
+  --estate-table-control-border-w: 1px;
+  --estate-table-control-radius: 0.25rem;
+  --estate-table-control-pad: 0.125rem 0.375rem;   /* the bar's box, the toggle, the copy button */
+  --estate-table-col-box-pad: 0.0625rem 0.25rem;   /* a column box */
+  --estate-table-col-cell-pad: 0.125rem 0.25rem;   /* the cell a column box sits in */
+  --estate-table-bar-pad:     0.25rem 0.5rem;
+  --estate-table-filter-box-w: 12rem;
+  --estate-table-placeholder-style: italic;
+  --estate-table-mark-gap:    0.25rem;    /* between a header's text and its sort mark */
+  --estate-table-mark-shift:  -0.15em;    /* the sort mark's vertical alignment */
+  --estate-table-failed:      #b91c1c;    /* red-700 — a copy the browser refused */
+  --estate-table-disabled:    0.5;        /* a pager button with nowhere to go (an icon, not text a reader must read) */
+
+  --estate-table-weight-band:  700;       /* title band, group band */
+  --estate-table-weight-head:  700;       /* header row — bold */
+  --estate-table-weight-label: 600;
+  --estate-table-weight-total: 600;
+
+  /* The behaviour's parts (estate-table.js). */
+  --estate-table-filter-bg:    #f1f5f9;   /* slate-100 — the filter bar, between band and table */
+  --estate-table-filter-border:#cbd5e1;   /* slate-300 */
+  --estate-table-copy-bg:      #1d6f42;   /* Excel's green — the copy lands in a spreadsheet */
+  --estate-table-copy-hover:   rgb(21 90 52);
+  --estate-table-excel-bg:     #1d6f42;   /* the Excel button's green */
+  --estate-table-excel-hover:  rgb(21 90 52);
+  --estate-table-peek-w:       24rem;     /* the peek card's greatest width */
+  --estate-table-resize-w:     0.5rem;    /* the drag handle at a header's right edge (estate-resize) */
+  --estate-table-peek-shadow:  0 0.25rem 0.75rem rgba(15, 23, 42, 0.25);
+  --estate-table-mark:         0.875em;   /* the sort mark and the copy icon — follows the page, as the sizes do */
+  --estate-table-target:       1.5rem;    /* the least a bare button in the band measures each way — a finger's target */
+}
+
+/* ── The box: title band, the table, footer ─────────────────────────────── */
+
+.estate-table-box {
+  border: var(--estate-table-frame-w) solid var(--estate-table-band);
+  border-radius: var(--estate-table-radius);
+  overflow: hidden;
+  font-family: var(--estate-table-font);
+}
+
+.estate-table-title {
+  position: relative;
+  background: var(--estate-table-band);
+  color: var(--estate-table-band-fg);
+  padding: var(--estate-table-band-pad);
+  font-size: var(--estate-table-size-sm);
+  line-height: var(--estate-table-line-sm);
+  font-weight: var(--estate-table-weight-band);
+  text-transform: uppercase;
+  letter-spacing: var(--estate-table-tracking);
+  text-align: center;
+}
+
+/* The application's own icon buttons, at the band's right edge. */
+.estate-table-actions {
+  position: absolute;
+  right: var(--estate-table-actions-inset);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--estate-table-gap);
+}
+
+/* The band's buttons keep the author's case — the band's capitals, spacing and weight stop at the actions — and the
+ * script's copy and Excel buttons there are bare: an icon alone in the band's colour, no fill, no outline (the band's
+ * convention, estate-table.md §The skeleton). */
+.estate-table-title .estate-table-actions { text-transform: none; letter-spacing: normal; font-weight: normal; }
+.estate-table-title :is(.estate-table-copy, .estate-table-markup, .estate-table-excel) { background: none; border: 0; padding: 0; color: var(--estate-table-band-fg); min-inline-size: var(--estate-table-target); min-block-size: var(--estate-table-target); }
+/* Bare, but still a target: never smaller than --estate-table-target each way, and hover draws a thin ring in the band's colour. */
+.estate-table-title :is(.estate-table-copy, .estate-table-markup, .estate-table-excel):hover { background: none; outline: 1px solid currentColor; outline-offset: 1px; }
+/* A bare button has no fill to turn red: a refused press shows on the icon's colour instead. The Excel button's brand
+ * mark has colours of its own, so a refused press there shows the failed icon as a mask in that colour. */
+.estate-table-title :is(.estate-table-copy, .estate-table-markup, .estate-table-excel).estate-copy-failed { background: none; color: var(--estate-table-failed); }
+.estate-table-title .estate-table-excel.estate-copy-failed::before {
+  background: currentColor;
+  -webkit-mask: url('../icons/failed.svg') center / contain no-repeat; mask: url('../icons/failed.svg') center / contain no-repeat;
+}
+
+/* A strip for the author's own controls between the band and the table (a search box of their own, a legend). */
+.estate-table-toolbar {
+  display: flex; align-items: center; gap: var(--estate-table-gap);
+  padding: var(--estate-table-bar-pad); background: var(--estate-table-filter-bg);
+  border-bottom: var(--estate-table-rule-w) solid var(--estate-table-filter-border);
+  font-size: var(--estate-table-size); line-height: var(--estate-table-line); color: var(--estate-table-head-fg);
+}
+
+/* The plain variant's footer: a line in body text under a table outside any box (the pager goes here when asked for). */
+.estate-table-note {
+  margin-top: var(--estate-table-gap);
+  font-family: var(--estate-table-font); font-size: var(--estate-table-size); line-height: var(--estate-table-line);
+  color: var(--estate-table-fg);
+}
+
+/* A short table that should not stretch across the page. */
+.estate-table-box.estate-narrow { max-width: var(--estate-table-narrow-w); }
+.estate-table-box.estate-medium { max-width: var(--estate-table-medium-w); }
+
+/* Holds the <table>; a wide table scrolls inside the box, never the page. */
+.estate-table-scroll { overflow-x: auto; }
+
+/* A header that stays in view while a long table scrolls — opt-in, `estate-sticky` on the box.
+ * A sticky cell sticks to its nearest scrolling ancestor, and the scroller above
+ * scrolls only sideways, so the box's scroller becomes the vertical scroller too: the table scrolls
+ * inside a box at most --estate-table-sticky-h tall, and the header rows stay at its top. */
+.estate-table-box.estate-sticky .estate-table-scroll {
+  overflow: auto;
+  max-height: var(--estate-table-sticky-h);
+}
+/* The whole thead sticks, not each cell: a second header row (the column-filter row, estate-table.js) then rides under
+ * the first instead of stacking on top of it at top 0. :where keeps the background below a tint or the sortable hover,
+ * which still paint a stuck heading. */
+.estate-table-box.estate-sticky .estate-table thead { position: sticky; top: 0; z-index: 2; }
+.estate-table-box.estate-sticky :where(.estate-table thead) :is(th, td),
+.estate-table-box.estate-sticky :where(.estate-table.estate-numbered thead) tr::before {
+  background: var(--estate-table-head-bg);
+}
+
+.estate-table-footer {
+  background: var(--estate-table-band);
+  color: var(--estate-table-band-fg);
+  padding: var(--estate-table-band-pad);
+  font-size: var(--estate-table-size-sm);
+  line-height: var(--estate-table-line-sm);
+  text-align: center;
+}
+
+/* ── The table ──────────────────────────────────────────────────────────── */
+
+.estate-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--estate-table-font);
+  font-size: var(--estate-table-size);
+  line-height: var(--estate-table-line);
+  color: var(--estate-table-fg);
+}
+
+/* A table as wide as its content rather than its container — and
+ * the box around it shrinks with it, so its frame does not run the container's width. */
+.estate-table.estate-fit { width: auto; }
+.estate-table-box.estate-fit { width: fit-content; max-width: 100%; }
+
+/* Header row. Text stays selectable: being unable to copy a column heading is a worse defect
+ * than a stray highlight while sorting. */
+.estate-table thead { background: var(--estate-table-head-bg); }
+.estate-table th {
+  padding: var(--estate-table-head-pad);
+  text-align: left;
+  font-size: var(--estate-table-size);
+  line-height: var(--estate-table-line);
+  font-weight: var(--estate-table-weight-head);
+  letter-spacing: var(--estate-table-tracking);
+  color: var(--estate-table-head-fg);
+}
+.estate-table th.estate-sortable       { cursor: pointer; }
+.estate-table th.estate-sortable:hover { background: var(--estate-table-sort-hover); color: var(--estate-table-band-fg); }
+/* The sort mark estate-table.js puts in a sortable header: the estate icons sort / sort-up / sort-down
+ * (estate-icons.md), drawn in the header's own colour by a mask — never a character. */
+.estate-table th .estate-sort-mark {
+  display: inline-block; width: var(--estate-table-mark); height: var(--estate-table-mark);
+  margin-left: var(--estate-table-mark-gap); vertical-align: var(--estate-table-mark-shift); background: currentColor;
+  -webkit-mask: url('../icons/sort.svg') center / contain no-repeat; mask: url('../icons/sort.svg') center / contain no-repeat;
+}
+.estate-table th[data-estate-dir="asc"] .estate-sort-mark  { -webkit-mask-image: url('../icons/sort-up.svg');   mask-image: url('../icons/sort-up.svg'); }
+.estate-table th[data-estate-dir="desc"] .estate-sort-mark { -webkit-mask-image: url('../icons/sort-down.svg'); mask-image: url('../icons/sort-down.svg'); }
+
+/* Body rows: white, every even row tinted, a hairline between rows. A cell is a containing block,
+ * so a link stretched over its cell stays inside it. */
+.estate-table tbody { background: var(--estate-table-row); }
+.estate-table td {
+  position: relative;
+  padding: var(--estate-table-cell-pad);
+  border-bottom: var(--estate-table-rule-w) solid var(--estate-table-rule);
+}
+.estate-table tbody tr:nth-child(even) td { background: var(--estate-table-row-alt); }
+/* Stripes you can see — opt-in, `estate-striped` on the <table>, never the
+ * default. Bootstrap's table-striped, in the estate's colours. :where holds it at
+ * the zebra rule's weight, so a tint, a meaning, a group band or a totals row still wins. */
+.estate-table:where(.estate-striped) tbody tr:nth-child(even) td { background: var(--estate-table-row-stripe); }
+
+/* ── Cell kinds — put one on a <td> (and on its <th>, so the heading lines up) ── */
+
+/* The four names that carry a size match cells only: an element inside a small cell inherits its cell's size and is
+ * neither shrunk twice nor lifted to body size (the sizes are em). */
+.estate-table :is(td, th).estate-text   { font-size: var(--estate-table-size); line-height: var(--estate-table-line); }
+.estate-table .estate-num    { text-align: right; font-variant-numeric: tabular-nums; }
+.estate-table .estate-center { text-align: center; }
+/* A date or an id never breaks mid-token: '2026-07-' / '10' reads worse than a table that scrolls. */
+.estate-table .estate-nowrap { white-space: nowrap; }
+/* Body cells start at their row's first line, not its middle — opt-in on the <table>, for rows whose
+ * cells run to different heights, such as a list in a cell. */
+.estate-table.estate-top tbody :is(td, th),
+.estate-table.estate-top.estate-numbered tbody tr::before { vertical-align: top; }
+/* The label column of a label/value table: one narrow column of names beside their values. */
+.estate-table :is(td, th).estate-label  {
+  width: var(--estate-table-label-w);
+  white-space: nowrap;
+  font-size: var(--estate-table-size-sm);
+  line-height: var(--estate-table-line-sm);
+  font-weight: var(--estate-table-weight-label);
+  color: var(--estate-table-label-fg);
+}
+.estate-table :is(td, th).estate-sm     { font-size: var(--estate-table-size-sm); line-height: var(--estate-table-line-sm); }
+.estate-table :is(td, th).estate-mono   { font-family: var(--estate-table-mono); font-size: var(--estate-table-size-sm); }
+.estate-table .estate-action { text-align: center; width: var(--estate-table-action-w); white-space: nowrap; }
+.estate-table .estate-link   { cursor: pointer; }
+.estate-table tbody tr td.estate-link:hover { background: var(--estate-table-link-hover); }
+.estate-table th.estate-num  { text-align: right; }
+/* A link that is the cell's only content fills the cell, so the whole cell is the click and the address works with
+ * JavaScript off (the cell is a containing block, above). */
+.estate-table td.estate-link > a:only-child::after { content: ""; position: absolute; inset: 0; }
+
+/* A pinned column stays in view while a wide table scrolls sideways inside its box. The stylesheet pins every such
+ * cell at offset 0 — so alone it pins ONE column — and gives it the row's own background, so the cells sliding under
+ * it do not show through (the even row's tint, a hand-picked tint, a meaning, the band and the total all win below).
+ * estate-table.js places a second and later pinned column by measuring the ones before it. */
+.estate-table :is(td, th).estate-pin { position: sticky; left: 0; z-index: 1; background: var(--estate-table-row); }
+.estate-table thead th.estate-pin, .estate-table thead tr.estate-table-filter-row td.estate-pin { background: var(--estate-table-head-bg); }
+.estate-table thead tr.estate-table-filter-row td.estate-pin { background: var(--estate-table-filter-bg); }
+
+/* ── Totals row — the last row of the body, or a <tfoot> row ────────────── */
+
+.estate-table tr.estate-total td,
+.estate-table tbody tr.estate-total:nth-child(even) td {
+  background: var(--estate-table-total-bg);
+  font-weight: var(--estate-table-weight-total);
+  border-top: var(--estate-table-total-rule-w) solid var(--estate-table-total-rule);
+}
+.estate-table tr.estate-total td.estate-num { color: var(--estate-table-total-num); }
+
+/* ── Row numbers — opt-in, `estate-numbered` on the <table> ──
+ *
+ * A CSS counter in a generated first cell of every row, so no application adds a cell: '#' over the
+ * column, nothing in tfoot. It counts body rows in the order shown and skips hidden ones, so it
+ * renumbers itself after a sort or a filter. Group bands and totals rows are not counted. The number
+ * is not in the DOM, so an Excel export or a copy does not carry it. */
+.estate-table.estate-numbered { counter-reset: estate-row; }
+.estate-table.estate-numbered tr::before {
+  display: table-cell;
+  content: "";
+  width: var(--estate-table-action-w);
+  padding: var(--estate-table-cell-pad);
+  text-align: right;
+  vertical-align: middle;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--estate-table-size-sm);
+  line-height: var(--estate-table-line-sm);
+  color: var(--estate-table-fg);
+  border-bottom: var(--estate-table-rule-w) solid var(--estate-table-rule);
+}
+.estate-table.estate-numbered thead tr::before {
+  content: "#";
+  padding: var(--estate-table-head-pad);
+  font-size: var(--estate-table-size);
+  line-height: var(--estate-table-line);
+  font-weight: var(--estate-table-weight-head);
+  color: var(--estate-table-head-fg);
+  border-bottom: none;
+}
+.estate-table.estate-numbered tbody tr:not(.estate-row-section, .estate-total) {
+  counter-increment: estate-row;
+}
+.estate-table.estate-numbered tbody tr:not(.estate-row-section, .estate-total)::before {
+  content: counter(estate-row);
+}
+.estate-table.estate-numbered tbody tr:nth-child(even)::before { background: var(--estate-table-row-alt); }
+.estate-table.estate-numbered:where(.estate-striped) tbody tr:nth-child(even)::before { background: var(--estate-table-row-stripe); }
+.estate-table.estate-numbered tbody tr.estate-row-section::before { background: var(--estate-table-section); }
+.estate-table.estate-numbered :is(tbody, tfoot) tr.estate-total::before {
+  background: var(--estate-table-total-bg);
+  border-top: var(--estate-table-total-rule-w) solid var(--estate-table-total-rule);
+}
+/* A row's hand-picked tint reaches its number too. */
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-primary::before { background: var(--estate-tint-primary); }
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-secondary::before { background: var(--estate-tint-secondary); }
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-success::before { background: var(--estate-tint-success); }
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-info::before { background: var(--estate-tint-info); }
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-warning::before { background: var(--estate-tint-warning); }
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-danger::before { background: var(--estate-tint-danger); }
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-light::before { background: var(--estate-tint-light); }
+.estate-table.estate-numbered :is(thead, tbody, tfoot) tr.estate-tint-dark::before { background: var(--estate-tint-dark); color: var(--estate-tint-dark-fg); }
+
+/* ── Meanings — a row or cell that SAYS something, painted the same in every application ──
+ *
+ * Each sits at the zebra rule's specificity (or above) so the tint wins on even rows, and keeps the
+ * dark body text. They are here, not in the application that first needed one, because a rule that
+ * paints an estate table from inside an application is a local override. */
+
+/* A band that groups the rows beneath it. */
+.estate-table tbody tr.estate-row-section td,
+.estate-table tbody tr.estate-row-section:nth-child(even) td {
+  background: var(--estate-table-section);
+  color: var(--estate-table-band-fg);
+  font-size: var(--estate-table-size-sm);
+  line-height: var(--estate-table-line-sm);
+  font-weight: var(--estate-table-weight-band);
+  text-transform: uppercase;
+  letter-spacing: var(--estate-table-tracking);
+  text-align: center;
+}
+
+/* Good / flagged / to-act-on — a verdict or state of the value in that cell or row. */
+.estate-table tbody tr td.estate-cell-good  { background: var(--estate-table-good); }
+.estate-table tbody tr td.estate-cell-flag,
+.estate-table tbody tr.estate-row-flag td   { background: var(--estate-table-flag); }
+.estate-table tbody tr td.estate-cell-join  { background: var(--estate-table-join); }
+
+/* Who a person is in a roster: teacher or student. */
+.estate-table tbody tr td.estate-cell-teacher { background: var(--estate-table-teacher); }
+.estate-table tbody tr td.estate-cell-student { background: var(--estate-table-student); }
+
+/* A ledger's three bands: balance sheet (asset, liability), income/expense, equity. */
+.estate-table tbody tr.estate-row-balancesheet td  { background: var(--estate-table-balancesheet); }
+.estate-table tbody tr.estate-row-incomeexpense td { background: var(--estate-table-incomeexpense); }
+.estate-table tbody tr.estate-row-equity td        { background: var(--estate-table-equity); }
+
+/* The eight general tints, for an author choosing a colour by hand. A tint that a program sets
+ * because the data MEANS something is a meaning class above, not one of these.
+ * They paint EVERY cell they reach — td and th, in thead, tbody and tfoot — on a whole table, a row
+ * or one cell, the narrower winning. Each selector sits at the zebra rule's specificity, after it, so a tint wins
+ * on even rows. */
+.estate-table.estate-tint-primary :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-primary); }
+.estate-table.estate-tint-secondary :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-secondary); }
+.estate-table.estate-tint-success :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-success); }
+.estate-table.estate-tint-info :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-info); }
+.estate-table.estate-tint-warning :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-warning); }
+.estate-table.estate-tint-danger :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-danger); }
+.estate-table.estate-tint-light :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-light); }
+.estate-table.estate-tint-dark :is(thead, tbody, tfoot) tr :is(td, th) { background: var(--estate-tint-dark); color: var(--estate-tint-dark-fg); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-primary > :is(td, th) { background: var(--estate-tint-primary); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-secondary > :is(td, th) { background: var(--estate-tint-secondary); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-success > :is(td, th) { background: var(--estate-tint-success); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-info > :is(td, th) { background: var(--estate-tint-info); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-warning > :is(td, th) { background: var(--estate-tint-warning); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-danger > :is(td, th) { background: var(--estate-tint-danger); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-light > :is(td, th) { background: var(--estate-tint-light); }
+.estate-table :is(thead, tbody, tfoot) tr.estate-tint-dark > :is(td, th) { background: var(--estate-tint-dark); color: var(--estate-tint-dark-fg); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-primary { background: var(--estate-tint-primary); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-secondary { background: var(--estate-tint-secondary); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-success { background: var(--estate-tint-success); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-info { background: var(--estate-tint-info); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-warning { background: var(--estate-tint-warning); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-danger { background: var(--estate-tint-danger); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-light { background: var(--estate-tint-light); }
+.estate-table :is(thead, tbody, tfoot) tr :is(td, th).estate-tint-dark { background: var(--estate-tint-dark); color: var(--estate-tint-dark-fg); }
+
+/* ── The behaviour's bars and buttons (estate-table.js) ────────────────────── */
+
+/* The filter bar: between the title band and the table, a search box and "N of M shown". A table
+ * with a copy button but no band and no caption carries the button here too. */
+.estate-table-filter {
+  display: flex; align-items: center; gap: var(--estate-table-gap);
+  padding: var(--estate-table-bar-pad); background: var(--estate-table-filter-bg);
+  border-bottom: var(--estate-table-rule-w) solid var(--estate-table-filter-border);
+  /* The body's size, not the small one: no new text smaller than the table's own, and no
+   * grey. */
+  font-size: var(--estate-table-size); line-height: var(--estate-table-line); color: var(--estate-table-head-fg);
+}
+.estate-table-filter-box {
+  font: inherit; color: var(--estate-table-fg); background: var(--estate-table-control-bg); min-width: var(--estate-table-filter-box-w);
+  border: var(--estate-table-control-border-w) solid var(--estate-table-filter-border); border-radius: var(--estate-table-control-radius); padding: var(--estate-table-control-pad);
+}
+.estate-table-filter-count { font-weight: var(--estate-table-weight-label); }
+.estate-table-filter .estate-table-copy { margin-left: auto; }
+/* A cell estate-drop-empty hides (its column holds nothing). */
+.estate-table :is(th, td)[hidden] { display: none; }
+/* A row the filter hides. The `hidden` attribute already does it; this says so for a page whose own
+ * stylesheet gives tr a display. */
+.estate-table tr[hidden] { display: none; }
+
+/* The column-filter row (estate-filter-columns): one box per column, under the headers. size=1 on the box and the
+ * width/min-width here keep a box from widening its column. estate-table-filter-row is the row's name; estate-filter-row
+ * is the OLD one (the form stylesheet owns it for a form's row) and is drawn until no served script writes it. */
+.estate-table thead :is(tr.estate-table-filter-row, tr.estate-filter-row) td { padding: var(--estate-table-col-cell-pad); background: var(--estate-table-filter-bg); }
+.estate-filter-col-box {
+  font: inherit; font-size: var(--estate-table-size); color: var(--estate-table-fg); background: var(--estate-table-control-bg);
+  width: 100%; min-width: 0; box-sizing: border-box;
+  border: var(--estate-table-control-border-w) solid var(--estate-table-filter-border); border-radius: var(--estate-table-control-radius); padding: var(--estate-table-col-box-pad);
+}
+.estate-table.estate-numbered thead :is(tr.estate-table-filter-row, tr.estate-filter-row)::before { content: ""; background: var(--estate-table-filter-bg); }
+/* A box's placeholder names its column — never the browser's pale grey, which is hard to read. */
+:is(.estate-table-filter-box, .estate-filter-col-box)::placeholder { color: var(--estate-table-head-fg); opacity: 1; font-style: var(--estate-table-placeholder-style); }
+/* The bar's button that shows or hides the column-filter row (as f does inside the table): the estate icon search. */
+.estate-table-cols-toggle {
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  border: var(--estate-table-control-border-w) solid var(--estate-table-filter-border); border-radius: var(--estate-table-control-radius); padding: var(--estate-table-control-pad);
+  background: var(--estate-table-control-bg); color: var(--estate-table-head-fg);
+}
+.estate-table-cols-toggle::before {
+  content: ''; display: inline-block; width: var(--estate-table-mark); height: var(--estate-table-mark); background: currentColor;
+  -webkit-mask: url('../icons/search.svg') center / contain no-repeat; mask: url('../icons/search.svg') center / contain no-repeat;
+}
+/* The drag handle estate-table.js puts at the right edge of each labelled header of an estate-resize table: the
+ * header is its containing block; the handle is a strip the full height of the header. */
+.estate-table.estate-resize th { position: relative; box-sizing: border-box; }   /* the width written is the header's whole width */
+.estate-table-resize-handle { position: absolute; top: 0; right: 0; bottom: 0; width: var(--estate-table-resize-w); cursor: col-resize; }
+/* A column that is filtering says so on its header, visible even while f has hidden the row. */
+.estate-table th.estate-filtered { box-shadow: inset 0 calc(-1 * var(--estate-table-filtered-w)) 0 var(--estate-table-section); }
+
+/* The copy button: the estate icon copy (copied for a moment after it worked), on Excel's green. The HTML copy
+   (estate-copy-markup) wears the same button with the estate icon code. */
+.estate-table-copy, .estate-table-markup {
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  border: 0; border-radius: var(--estate-table-control-radius); padding: var(--estate-table-control-pad);
+  background: var(--estate-table-copy-bg); color: var(--estate-table-band-fg);
+}
+.estate-table-copy:hover, .estate-table-markup:hover { background: var(--estate-table-copy-hover); }
+.estate-table-copy::before, .estate-table-markup::before {
+  content: ''; display: inline-block; width: var(--estate-table-mark); height: var(--estate-table-mark); background: currentColor;
+  -webkit-mask: url('../icons/copy.svg') center / contain no-repeat; mask: url('../icons/copy.svg') center / contain no-repeat;
+}
+.estate-table-markup::before { -webkit-mask-image: url('../icons/code.svg'); mask-image: url('../icons/code.svg'); }
+.estate-table-copy.estate-copied::before, .estate-table-markup.estate-copied::before { -webkit-mask-image: url('../icons/copied.svg'); mask-image: url('../icons/copied.svg'); }
+/* A copy the browser refused says so on the button, not only in its tooltip: the failed icon, on red. */
+.estate-table-copy.estate-copy-failed, .estate-table-markup.estate-copy-failed { background: var(--estate-table-failed); }
+.estate-table-copy.estate-copy-failed::before, .estate-table-markup.estate-copy-failed::before { -webkit-mask-image: url('../icons/failed.svg'); mask-image: url('../icons/failed.svg'); }
+caption :is(.estate-table-copy, .estate-table-markup) { margin-left: var(--estate-table-gap); }
+
+/* The Excel button (estate-excel), or the link data-excel-href makes of it: the brand mark drawn as an image in its own
+ * colours (a brand icon is not masked), on the Excel green; bare in a band, as the copy button is. */
+.estate-table-excel {
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none;
+  border: 0; border-radius: var(--estate-table-control-radius); padding: var(--estate-table-control-pad);
+  background: var(--estate-table-excel-bg); color: var(--estate-table-band-fg);
+}
+.estate-table-excel:hover { background: var(--estate-table-excel-hover); }
+.estate-table-excel::before {
+  content: ''; display: inline-block; width: var(--estate-table-mark); height: var(--estate-table-mark);
+  background: url('../icons/excel.svg') center / contain no-repeat;
+}
+.estate-table-excel.estate-busy { cursor: progress; }
+.estate-table-excel.estate-copy-failed { background: var(--estate-table-failed); }
+.estate-table-filter :is(.estate-table-copy, .estate-table-markup) + :is(.estate-table-markup, .estate-table-excel) { margin-left: var(--estate-table-gap); }
+caption .estate-table-excel { margin-left: var(--estate-table-gap); }
+
+/* The peek card (data-peek): one per page, fixed beside the cell, holding what the address answered. */
+.estate-table-peek {
+  position: fixed; z-index: 10; max-width: var(--estate-table-peek-w);
+  padding: var(--estate-table-cell-pad); background: var(--estate-table-control-bg); color: var(--estate-table-fg);
+  border: var(--estate-table-control-border-w) solid var(--estate-table-filter-border); border-radius: var(--estate-table-control-radius);
+  box-shadow: var(--estate-table-peek-shadow);
+  font-family: var(--estate-table-font); font-size: var(--estate-table-size); line-height: var(--estate-table-line);
+}
+
+/* The pager (estate-page) in the footer: the size choice, previous, "a–b of N · page p of q", next. In a footer band
+ * the buttons are bare in the band's colour (the band's convention); under a plain table's note they are body-coloured. */
+.estate-table-pager { display: inline-flex; align-items: center; gap: var(--estate-table-gap); margin-left: var(--estate-table-gap); font-size: var(--estate-table-size); line-height: var(--estate-table-line); text-transform: none; letter-spacing: normal; font-weight: normal; }
+.estate-table-page-size {
+  font: inherit; color: var(--estate-table-fg); background: var(--estate-table-control-bg);
+  border: var(--estate-table-control-border-w) solid var(--estate-table-filter-border); border-radius: var(--estate-table-control-radius); padding: var(--estate-table-control-pad);
+}
+.estate-table-page-prev, .estate-table-page-next {
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  border: 0; padding: 0; background: none; color: inherit;
+}
+.estate-table-page-prev:disabled, .estate-table-page-next:disabled { cursor: default; opacity: var(--estate-table-disabled); }
+.estate-table-page-prev::before, .estate-table-page-next::before {
+  content: ''; display: inline-block; width: var(--estate-table-mark); height: var(--estate-table-mark); background: currentColor;
+  -webkit-mask: url('../icons/previous.svg') center / contain no-repeat; mask: url('../icons/previous.svg') center / contain no-repeat;
+}
+.estate-table-page-next::before { -webkit-mask-image: url('../icons/next.svg'); mask-image: url('../icons/next.svg'); }
+.estate-table-page-count { white-space: nowrap; }
+
+/* ── Print — the bands and tints are information, so they print ─────────── */
+
+@media print {
+  .estate-table-filter, .estate-table-copy, .estate-table-markup, .estate-table-excel, .estate-table-peek, .estate-table-resize-handle, .estate-table-page-size, .estate-table-page-prev, .estate-table-page-next, .estate-table-cols-toggle, .estate-table th .estate-sort-mark, .estate-table :is(tr.estate-table-filter-row, tr.estate-filter-row) { display: none; }
+  .estate-table-title, .estate-table-footer, .estate-table thead, .estate-table td {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .estate-table tr { break-inside: avoid; }
+}

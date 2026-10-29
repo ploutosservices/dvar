@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>estate-tip check</title>
+<!-- estate-tip.md §3: a plain page, no title bar, the stylesheet and its script. Published beside them
+     as <CDN>/estate/tip/index.html, so the relative link reaches the CDN's copy there. -->
+<link rel="stylesheet" href="estate-tip.css">
+<script src="estate-tip.js" defer></script>
+<style>
+  body { font: 15px/1.5 system-ui, sans-serif; margin: 2rem; color: #0f172a; }
+  .row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin: 0 0 3rem; }
+  button, a { font: inherit; }
+  .far { margin-left: auto; }
+  .box { width: 120px; height: 40px; overflow: hidden; border: 1px dashed #94a3b8; padding: 4px; }
+  .bottom { position: fixed; bottom: 4px; left: 2rem; }
+</style>
+</head>
+<body>
+<h1>estate-tip</h1>
+<p>Hover or tab to each control: its sentence shows below it.</p>
+<div class="row">
+  <button type="button" id="plain" data-estate-tip="A plain button outside any title bar">Plain button</button>
+  <a href="#" id="link" data-estate-tip="A link carries the same sentence">A link</a>
+  <span id="span" tabindex="0" data-estate-tip="A long sentence wraps once it reaches the tip's widest, so a long explanation stays readable rather than running off the screen">Long sentence</span>
+  <button type="button" id="end" class="far" data-estate-tip="Opens leftwards at the right edge" data-estate-tip-align="end">Right edge</button>
+</div>
+<div class="row"><div class="box"><button type="button" id="boxed" data-estate-tip="Drawn whole outside the box that would clip it">In a box</button></div></div>
+<button type="button" id="bottom" class="bottom" data-estate-tip="No room below, so it opens above">At the bottom</button>
+</body>
+</html>
