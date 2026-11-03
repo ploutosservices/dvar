@@ -1,3 +1,5 @@
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="mark/dvar.svg"><img src="mark/dvar-dark.svg" width="112" alt="dvar's mark: a fort's open gateway between two domed bastions"></picture></p>
+
 # dvar
 
 *Dvar* (द्वार) is a door. This is a recipe for a platform's front door that several independent

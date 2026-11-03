@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="t">
+  <title id="t">Dvar — a fort's open gateway between two domed bastions (dark, for a light ground)</title>
+  <g fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- the two bastions, each under a small dome -->
+    <path d="M12 118 V48 H34 M94 48 H116 V118"/>
+    <path d="M12 48 C12 36 34 36 34 48 M94 48 C94 36 116 36 116 48"/>
+    <!-- the gatehouse between them -->
+    <path d="M34 118 V30 H94 V118"/>
+    <!-- the great pointed arch, open -->
+    <path d="M46 118 V76 C46 60 56 51 64 46 C72 51 82 60 82 76 V118"/>
+    <!-- the flag above the gate -->
+    <path d="M64 30 V12 L78 17 L64 22"/>
+    <!-- the ground -->
+    <path d="M6 118 H122"/>
+  </g>
+</svg>
