@@ -23,24 +23,17 @@ it. Why it is shaped this way is in [the essay](docs/dvar.md).
 | **utility** | a service that serves houses, never people: here bhandara (files) and dakiya (mail) |
 | **environment** | which world this is (production, staging, a demo). Here it is the door's realm name, `demo` |
 | **estate** | the set of houses behind one door |
-| **neenv** | the prepared ground dvar stands on (below) |
+| **neenv** | the prepared ground dvar stands on ([its own project](https://github.com/ploutosservices/neenv)) |
 
 ## 1. Prepare the neenv
 
 **For a trial, the demo prepares a small neenv for you: go straight to [Try it](#2-try-it).** The list
 below is for a real deployment.
 
-*Neenv* (नींव) is the foundation poured before any wall. Dvar is installed only on prepared ground; check
-that each of these is true first:
-
-- machines and a network;
-- DNS for every name the door and the houses answer to;
-- a certificate authority whose root every machine trusts (the passes depend on it);
-- a reverse proxy;
-- PostgreSQL;
-- a public domain for the door's address.
-
-[The essay's chapter on neenv](docs/dvar.md#neenv-the-ground-it-stands-on) says what each one carries.
+*Neenv* (नींव) is the foundation poured before any wall. Dvar is installed only on prepared ground.
+[neenv](https://github.com/ploutosservices/neenv) is its own project: it lists every layer, what each one
+carries, and the checks to make before building on it. Dvar is the first structure on that ground;
+[the essay's chapter on neenv](docs/dvar.md#neenv-the-ground-it-stands-on) says what dvar leans on.
 
 ## 2. Try it
 
